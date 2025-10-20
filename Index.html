@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8" />
+<title>Entrada de datos + lista (base para ruleta)</title>
+<style>
+  body{font-family:sans-serif;padding:16px}
+  input,button{padding:8px 10px;margin:6px 6px 6px 0}
+  ul{padding-left:18px}
+  #resultado{font-weight:bold;margin-top:8px}
+</style>
+
+<h1>Base para Ruleta: cargar ítems y elegir uno al azar</h1>
+
+<p>
+  <input id="inputItem" type="text" placeholder="Escribí un ítem (ej: 'Hacer 10 sentadillas')">
+  <button onclick="agregar()">Agregar</button>
+  <button onclick="girar()">Girar</button>
+</p>
+
+<p>Lista actual:</p>
+<ul id="lista"></ul>
+
+<p id="resultado">Resultado: —</p>
+
+<script>
+  // Array donde guardamos los ítems de la ruleta
+  const items = [];
+
+  // Referencias a elementos del DOM
+  const input = document.getElementById("inputItem");
+  const ul = document.getElementById("lista");
+  const out = document.getElementById("resultado");
+
+  // Agregar un ítem a la lista
+  function agregar(){
+    const texto = input.value.trim();   // sacamos espacios al inicio/fin
+    if (!texto) return;                 // si está vacío, no hacemos nada
+    items.push(texto);                  // GUARDAMOS en el array
+    input.value = "";                   // limpiamos el input
+    input.focus();
+    render();                           // actualizamos la lista en pantalla
+  }
+
+  // Elegir un ítem al azar (como la ruleta)
+  function girar(){
+    if (items.length === 0){
+      out.textContent = "Resultado: (la lista está vacía)";
+      return;
+    }
+    // índice aleatorio entre 0 y items.length - 1
+    const i = Math.floor(Math.random() * items.length);
+    out.textContent = "Resultado: " + items[i];
+  }
+
+  // Dibujar la lista <ul> con los ítems actuales
+  function render(){
+    ul.innerHTML = "";                  // limpiamos la lista visual
+    for (let i = 0; i < items.length; i++){
+      const li = document.createElement("li");
+      li.textContent = (i+1) + ". " + items[i];
+      ul.appendChild(li);
+    }
+    out.textContent = "Resultado: —";   // reseteamos resultado al cambiar la lista
+  }
+</script>
+</html>
